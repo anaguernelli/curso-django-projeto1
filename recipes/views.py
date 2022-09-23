@@ -10,8 +10,8 @@ def home(request):
     
 # adicionar a pasta em q está o arquivo p não haver colisões
 
-def recipes(request, id):
-    return render(request, 'recipes/pages/home.html', context={
+def recipe(request, id):
+    return render(request, 'recipes/pages/recipe-view.html', context={
         'name': 'Aninhaaaa',
     }) 
 

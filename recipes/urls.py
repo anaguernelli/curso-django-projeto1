@@ -6,7 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home),
-    path('recipes/<int:id>/', views.recipes),
+    path('recipes/<int:id>/', views.recipe),
 ]
 
 # int - Matches zero or any positive integer. Returns an int.
