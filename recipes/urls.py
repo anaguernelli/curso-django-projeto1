@@ -1,8 +1,8 @@
 from django.urls import path
 
 from . import views 
-# utiliza o comando de cima em vez de pôr sequenciado
-# . (ponto) - da pasta em que já está
+# the command above is to not put views in sequence
+# . (dot) - path where you already is
 
 urlpatterns = [
     path('', views.home),
