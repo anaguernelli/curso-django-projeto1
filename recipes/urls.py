@@ -1,12 +1,15 @@
 from django.urls import path
 
-from . import views 
+from . import views
 # the command above is to not put views in sequence
 # . (dot) - path where you already is
 
+
+app_name = 'recipes'
+
 urlpatterns = [
-    path('', views.home),
-    path('recipes/<int:id>/', views.recipe),
+    path('', views.home, name='home'),
+    path('recipes/<int:id>/', views.recipe, name='recipe'),
 ]
 
 # int - Matches zero or any positive integer. Returns an int.
