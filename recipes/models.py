@@ -25,6 +25,7 @@ class Recipe(models.Model):
     # para adicionar a data de 'lançamento', e não está sujeito a mudança
     updated_at = models.DateTimeField(auto_now=True)
     # para atualizar sempre que houver alterações
+    is_published = models.BooleanField(default=False)
     cover = models.ImageField(
       upload_to='recipes/covers/%Y/%m/%d/', blank=True, default='')
     category = models.ForeignKey(

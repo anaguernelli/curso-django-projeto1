@@ -1,0 +1,11 @@
+{% extends 'global/base.html' %}
+
+{% block title %} Category |{% endblock title %}
+{% block content %}
+<div class="main-content main-content-list container">
+    {% for recipe in recipes %}
+    {% comment %} a cada vez que chamar uma RECIPE (tabela receita) vai gerar a iteração de recipes {% endcomment %}
+    {% include 'recipes/partials/recipe.html' %}
+    {% endfor %}
+</div>
+{% endblock content %}
