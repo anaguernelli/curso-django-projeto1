@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-# the command above is to not put views in sequence
+
 # . (dot) - path where you already is
 
 
