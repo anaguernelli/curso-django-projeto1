@@ -25,7 +25,6 @@ def category(request, category_id):
         'recipes': recipes, 
         'title': f'{recipes[0].category.name} - Category |'})
 
-
 def recipe(request, id):
     recipe = get_object_or_404(Recipe, pk=id, is_published=True,)
 
