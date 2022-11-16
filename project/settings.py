@@ -119,9 +119,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# salvar seus arqs estáticos customizados
+
 STATICFILES_DIRS = [
     BASE_DIR / 'base_static',
 ]
+
 STATIC_ROOT = BASE_DIR / 'static'
 
 # Mesma coisa que arquivos estáticos, só que para mídias

@@ -28,3 +28,11 @@ class RecipeViewsTest(TestCase):
     def test_recipe_home_view_loads_correct_template(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
+    
+    def test_recipe_home_template_shows_no_recipes_found_if_no_recipes(self):
+        response = self.client.get(reverse('recipes:home'))
+        self.assertIn(
+            '<h1>No recipes found</h1>', 
+            response.content.decode('utf-8'))
+# o content é o conteúdo HTML de recipes:home e está sendo imposto como string
+# enquanto q o assertIn() procura pro 'recipes not found' dentro deste content
