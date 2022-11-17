@@ -12,15 +12,7 @@ class RecipeViewsTest(TestCase):
         # está trabalhando de forma dinâmica
         self.assertIs(view.func, views.home)
         # está comparando se a função view É a view de home
-
-    def test_recipe_category_views_function_is_correct(self):
-        view = resolve(reverse('recipes:category', kwargs={'category_id': 1}))
-        self.assertIs(view.func, views.category)
-
-    def test_recipe_detail_views_function_is_correct(self):
-        view = resolve(reverse('recipes:recipe', kwargs={'id': 1}))
-        self.assertIs(view.func, views.recipe)
-
+    
     def test_recipe_home_view_returns_status_code_200_OK(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertEqual(response.status_code, 200)
@@ -32,7 +24,31 @@ class RecipeViewsTest(TestCase):
     def test_recipe_home_template_shows_no_recipes_found_if_no_recipes(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertIn(
-            '<h1>No recipes found</h1>', 
+            '<h1>No Recipes Found Here !!</h1>',
             response.content.decode('utf-8'))
 # o content é o conteúdo HTML de recipes:home e está sendo imposto como string
 # enquanto q o assertIn() procura pro 'recipes not found' dentro deste content
+
+    def test_recipe_category_view_function_is_correct(self):
+        view = resolve(
+            reverse('recipes:category', kwargs={'category_id': 1000})
+        )
+        self.assertIs(view.func, views.category)
+    
+    def test_recipe_category_view_returns_404_if_no_recipes_found(self):
+        response = self.client.get(
+            reverse('recipes:category', kwargs={'category_id': 1000})
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_recipe_detail_views_function_is_correct(self):
+        view = resolve(
+            reverse('recipes:recipe', kwargs={'id': 1})
+        )
+        self.assertIs(view.func, views.recipe)
+    
+    def test_recipe_detail_view_returns_404_if_no_recipes_found(self):
+        response = self.client.get(
+            reverse('recipes:recipe', kwargs={'id': 1000})
+        )
+        self.assertEqual(response.status_code, 404)
