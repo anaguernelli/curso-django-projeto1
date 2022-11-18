@@ -1,14 +1,9 @@
 from django.urls import resolve, reverse
-
 from recipes import views
-
-from .test_recipe_base import RecipeTestBase
+from .test_recipe_base import RecipeTestBase, Recipe
 
 
 class RecipeViewsTest(RecipeTestBase):
-    def tearDown(self) -> None:
-        return super().tearDown()
-
     def test_recipe_home_views_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
         # pôr só '/' na url é hard coded, desta forma acima
@@ -33,16 +28,17 @@ class RecipeViewsTest(RecipeTestBase):
 # enquanto q o assertIn() procura pro 'recipes not found' dentro deste content
 
     def test_recipe_home_template_loads_recipes(self):
+        # Need a recipe for this test
+        self.make_recipe()
+
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
-        # para usar o context, deve chamar uma len() pois ele é uma lista []
 
+        # para usar o context, deve chamar uma len() pois ele é uma lista []
+        # Check if one recipe exists
         self.assertIn('Recipe Title', content)
-        self.assertIn('10 Minutos', content)
-        self.assertIn('5 Porções', content)
         self.assertEqual(len(response_context_recipes), 1)
-        ...
 
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(
