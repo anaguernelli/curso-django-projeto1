@@ -53,7 +53,8 @@ class RecipeTestBase(TestCase):
         return Recipe.objects.create(
             category=self.make_category(**category_data),
             # ** desempacotamento
-            # pega todas as chaves desse dicionário e criar name='', first_name='' etc
+            # pega todas as chaves desse dicionário e criar name='', 
+            # firstname='' etc
             # ele pegaos parametros do dicionario ?
             author=self.make_author(**author_data),
             title=title,
