@@ -27,8 +27,10 @@ class RecipeViewsTest(RecipeTestBase):
             '<h1>No Recipes Found Here !!</h1>',
             response.content.decode('utf-8')
         )
-        # o content é o conteúdo HTML de recipes:home e está sendo imposto como string
-        # enquanto q o assertIn() procura pro 'recipes not found' dentro deste content
+        # o content é o conteúdo HTML de recipes:home
+        # e está sendo imposto como string
+        # enquanto q o assertIn() procura pro 'recipes not found'
+        # dentro deste content
 
     def test_recipe_home_template_loads_recipes(self):
         # Need a recipe for this test
@@ -111,7 +113,7 @@ class RecipeViewsTest(RecipeTestBase):
         response = self.client.get(reverse('recipes:recipe', kwargs={'id': 1}))
         content = response.content.decode('utf-8')
 
-        self.assertIn(needed_title  , content)
+        self.assertIn(needed_title, content)
 
     def test_recipe_detail_template_doesnt_load_recipe_not_published(self):
         # Test recipe is published False if it does not show
@@ -127,4 +129,3 @@ class RecipeViewsTest(RecipeTestBase):
         )
 
         self.assertEqual(response.status_code, 404)
-
