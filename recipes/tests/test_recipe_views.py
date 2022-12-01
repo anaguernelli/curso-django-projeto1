@@ -58,7 +58,7 @@ class RecipeViewsTest(RecipeTestBase):
 
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(
-            reverse('recipes:category', kwargs={'category_id': 1000})
+            reverse('recipes:category', kwargs={'category_id': 1})
         )
         self.assertIs(view.func, views.category)
 
