@@ -1,9 +1,11 @@
+from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 # lê e renderiza o arquivo (deixa aparecer no código fonte o HTML, etc)
 from utils.recipes.factory import make_recipe
 from .models import Recipe
 
 # Create your views here.
+
 
 def home(request):
     recipes = Recipe.objects.filter(
@@ -12,6 +14,7 @@ def home(request):
     return render(request, 'recipes/pages/home.html', context={
         'recipes': recipes,
     })
+
 
 def category(request, category_id):
     recipes = get_list_or_404(
@@ -24,6 +27,7 @@ def category(request, category_id):
         'recipes': recipes, 
         'title': f'{recipes[0].category.name} - Category |'})
 
+
 def recipe(request, id):
     recipe = get_object_or_404(Recipe, pk=id, is_published=True,)
 
@@ -32,5 +36,11 @@ def recipe(request, id):
         'is_detail_page': True,
     })
 
+
 def search(request):
+    search_term = request.GET.get('q')
+
+    if not search_term:
+        raise Http404()
+
     return render(request, 'recipes/pages/search.html')
