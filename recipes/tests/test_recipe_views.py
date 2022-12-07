@@ -62,8 +62,7 @@ class RecipeViewsTest(RecipeTestBase):
         )
         self.assertIs(view.func, views.category)
 
-    def test_recipe_category_view_returns_404_if_no_recipes_found(self): 
-        ###########
+    def test_recipe_category_view_returns_404_if_no_recipes_found(self):
         response = self.client.get(
             reverse('recipes:category', kwargs={'category_id': 1000})
         )
@@ -79,8 +78,7 @@ class RecipeViewsTest(RecipeTestBase):
 
         self.assertIn(needed_title, content)
 
-    def test_recipe_category_template_doesnt_load_recipes_not_published(self): 
-        ##########
+    def test_recipe_category_template_doesnt_load_recipes_not_published(self):
         # Test recipe is published False if it does not show
         recipe = self.make_recipe(is_published=False)
 
@@ -101,8 +99,7 @@ class RecipeViewsTest(RecipeTestBase):
         )
         self.assertIs(view.func, views.recipe)
 
-    def test_recipe_detail_view_returns_404_if_no_recipes_found(self): 
-        ############
+    def test_recipe_detail_view_returns_404_if_no_recipes_found(self):
         response = self.client.get(
             reverse('recipes:recipe', kwargs={'id': 1000})
         )
@@ -118,8 +115,7 @@ class RecipeViewsTest(RecipeTestBase):
 
         self.assertIn(needed_title, content)
 
-    def test_recipe_detail_template_doesnt_load_recipe_not_published(self): 
-        ############
+    def test_recipe_detail_template_doesnt_load_recipe_not_published(self):
         # Test recipe is published False if it does not show
         recipe = self.make_recipe(is_published=False)
 
@@ -139,7 +135,7 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertIs(resolved.func, views.search)
 
     def test_recipe_search_loads_correct_template(self):
-        response = self.client.get(reverse('recipes:search'))
+        response = self.client.get(reverse('recipes:search') + '?q=teste')
         self.assertTemplateUsed(response, 'recipes/pages/search.html')
 
     def test_recipe_search_raises_404_if_no_search_term(self):

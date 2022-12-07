@@ -1,7 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 # lê e renderiza o arquivo (deixa aparecer no código fonte o HTML, etc)
-from utils.recipes.factory import make_recipe
 from .models import Recipe
 
 # Create your views here.
@@ -24,7 +23,7 @@ def category(request, category_id):
         ).order_by('-id')
     )
     return render(request, 'recipes/pages/category.html', context={
-        'recipes': recipes, 
+        'recipes': recipes,
         'title': f'{recipes[0].category.name} - Category |'})
 
 
