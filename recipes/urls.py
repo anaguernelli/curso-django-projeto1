@@ -14,6 +14,8 @@ urlpatterns = [
         views.category,
         name='category'),
     path('recipes/<int:id>/', views.recipe, name='recipe'),
+    path('recipes/search/', lambda request: ..., name='search'),
+
 ]
 
 # int - Matches zero or any positive integer. Returns an int.

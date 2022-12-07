@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Models converte o código em tabelas de db 
+# Models converte o código em tabelas de db
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
@@ -13,7 +13,7 @@ class Recipe(models.Model):
     title = models.CharField(max_length=65) 
     # CharField atua como varChar do bd
     description = models.CharField(max_length=165)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(max_length=65)
     servings = models.IntegerField()
