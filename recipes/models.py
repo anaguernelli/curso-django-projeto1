@@ -3,14 +3,16 @@ from django.db import models
 
 # Models converte o código em tabelas de db
 
+
 class Category(models.Model):
     name = models.CharField(max_length=65)
 
     def __str__(self):
         return self.name
 
+
 class Recipe(models.Model):
-    title = models.CharField(max_length=65) 
+    title = models.CharField(max_length=65)
     # CharField atua como varChar do bd
     description = models.CharField(max_length=165)
     slug = models.SlugField(unique=True)
