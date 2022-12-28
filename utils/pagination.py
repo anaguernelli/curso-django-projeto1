@@ -20,10 +20,10 @@ def make_pagination_range(
         stop_range += start_range_offset
 
     if stop_range >= total_pages:
-        start_range = start_range - abs(total_pages - stop_range)
+        start_range -= abs(total_pages - stop_range)
 
     # fatiamento do range de 0 até 4
-    # Como colocará no template, faremos dicionário
+    # Para facilitar no template, faremos dicionário
     pagination = page_range[start_range:stop_range]
     return {
         'pagination': pagination,
