@@ -10,8 +10,10 @@ from .models import Recipe
 
 import os
 
-PER_PAGE = os.environ.get('PER_PAGE', 6)
+PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 # caso não ache nada no per_page, o padrão vai ser 6
+# int() para qunado fizer upload diferente, para algum servidor diferente
+# não dar erro
 
 
 def home(request):
@@ -19,7 +21,7 @@ def home(request):
      is_published=True
     ).order_by('-id')
 
-    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGES)
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': page_obj,
@@ -35,7 +37,7 @@ def category(request, category_id):
         ).order_by('-id')
     )
 
-    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGES)
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
     return render(request, 'recipes/pages/category.html', context={
         'recipes': page_obj,
@@ -66,12 +68,12 @@ def search(request):
         is_published=True,
     ).order_by('-id')
 
-    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGES)
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
     return render(request, 'recipes/pages/search.html', {
         'page_title': f'Search for "{search_term}"',
         'search_term': search_term,
-        'recipes': page_obj,
+        'recipes': page_obj,    
         'pagination_range': pagination_range,
         'additional_url_query': f'&q={search_term}'
     })
