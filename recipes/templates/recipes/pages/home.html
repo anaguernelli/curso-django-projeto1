@@ -2,6 +2,15 @@
 
 {% block title %} Home |{% endblock title %}
 {% block content %}
+
+{% if messages %}
+<div class="main-content center container">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="main-content main-content-list container">
     {% for recipe in recipes %}
          {% include 'recipes/partials/recipe.html' %}
@@ -9,7 +18,8 @@
     <div class="center m-y">
         {% comment %} 
         vai dar espaço no topo e embaixo 
-        plus: colocou a classe center e ACRESCENTOU outra classe na mesma div,
+        plus: colocou a classe center e 
+        ACRESCENTOU outra classe na mesma div,
         no caso o 'm-y'
         {% endcomment %}
         <h1>No Recipes Found Here !!</h1>
