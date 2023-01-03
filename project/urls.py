@@ -23,7 +23,9 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('recipes.urls')),
-    # recipes/ > ficaria dominio.com/recipes/sobre exemplo 
+    # recipes/ > ficaria dominio.com/recipes/sobre exemplo
+    path('authors/', include('authors.urls')),
+
 ]
 
 # concatenar o urlpatterns
