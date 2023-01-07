@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 def add_attr(field, attr_name, attr_new_val):
@@ -80,3 +81,18 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your password here'
             })
         }
+
+# deve ser específico
+
+
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+
+        if 'anao' in data:
+            raise ValidationError(
+                'Não digite %(value)s no campo password',
+                code='invalid',
+                params={'value': '"anao"'}
+            )
+
+        return data
