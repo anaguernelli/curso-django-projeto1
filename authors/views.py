@@ -9,7 +9,7 @@ def register_view(request):
     # exibe o formulário
     register_form_data = request.session.get('register_form_data', None)
     form = RegisterForm(register_form_data)
-    # form que já tem dados, se tiver erros vai exibir, 
+    # form que já tem dados, se tiver erros vai exibi-los,
     # se tiver validado vai validar etc
     return render(request, 'authors/pages/register_view.html', {
         'form': form,
@@ -27,6 +27,7 @@ def register_create(request):
     request.session['register_form_data'] = POST
     # salvando o dicionário do POST inteiro
     form = RegisterForm(POST)
+    # quer salvar os dados do formulário na sessão (session )
 
     return redirect('authors:register')
     # redirecionar para a view register_view
