@@ -84,7 +84,6 @@ class RegisterForm(forms.ModelForm):
 
 # deve ser específico
 
-
     def clean_password(self):
         data = self.cleaned_data.get('password')
 
@@ -96,3 +95,32 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        # way 1
+
+        # if password != password2:
+        #     raise ValidationError({
+        #         'password': 'Password and password2 must be equal',
+        #         'password2': 'Password and password2 must be equal',
+        #     })
+
+        # way 2
+
+        if password != password2:
+            password_confirmation_error = ValidationError(
+                'Password and password2 must be equal',
+                code='invalid'
+            )
+
+            raise ValidationError({
+                'password': password_confirmation_error,
+                'password2': [
+                    password_confirmation_error,
+                ],
+            })
