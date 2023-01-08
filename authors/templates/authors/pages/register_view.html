@@ -7,6 +7,8 @@
     <h2>Register</h2>
   </div>
 
+  {% include 'recipes/partials/messages.html' %}
+
   <div class="main-content container">
     <form action="{% url 'authors:create' %}" method="POST">
       {% csrf_token %}
@@ -26,15 +28,6 @@
         {% endfor %}
       </div>
 
-      {% comment %} {% if form.errors %}
-      <div class="form-content form-content-grid">
-        <div class="form-group">
-          <div class="message message-error">
-            There error in the form , please fix them and send again.
-          </div>
-        </div>
-      </div>
-      {% endif %} {% endcomment %}
       {% if form.errors %}
       <div class="form-content form-content-grid">
         <div class="form-group">

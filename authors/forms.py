@@ -13,6 +13,8 @@ def add_placeholder(field, placeholder_val):
     field.widget.attrs['placeholder'] = placeholder_val
 
 
+# way 3
+
 def strong_password(password):
     # ^ -> começar
     # $ -> terminar
@@ -28,7 +30,6 @@ def strong_password(password):
             ),
             code='invalid'
         )
-
 
 
 class RegisterForm(forms.ModelForm):
