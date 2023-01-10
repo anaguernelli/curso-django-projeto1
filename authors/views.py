@@ -32,7 +32,11 @@ def register_create(request):
     # quer salvar os dados do formulário na sessão (django session)
 
     if form.is_valid():
-        form.save()
+        user = form.save(commit=False)
+        # não iremos salvar a password (na forma de string)
+        # iremo tratá-la primeiro
+        user.set_password(user.password)
+        user.save()
         messages.success(request, 'Your user is created, please log in.')
 
         del(request.session['register_form_data'])
