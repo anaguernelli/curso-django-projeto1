@@ -29,7 +29,7 @@ def register_create(request):
     request.session['register_form_data'] = POST
     # salvando o dicionário do POST inteiro
     form = RegisterForm(POST)
-    # quer salvar os dados do formulário na sessão (session )
+    # quer salvar os dados do formulário na sessão (django session)
 
     if form.is_valid():
         form.save()
