@@ -122,9 +122,9 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         )
 
         msg = (
-            'Password must have at least one uppercase letter, '
-            'one lowercase letter and one number. The length should be '
-            'at least 8 characters.'
+            'Password must have at least one uppercase, '
+            'One lowercase letter and one number '
+            'The length should be at least 8 characters'
         )
 
         self.assertIn(msg, response.content.decode('utf-8'))

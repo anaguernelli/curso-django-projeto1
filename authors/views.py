@@ -6,6 +6,7 @@ from .forms import RegisterForm
 
 from django.contrib import messages
 
+from django.urls import reverse
 
 def register_view(request):
     # exibe o formulário
@@ -15,6 +16,7 @@ def register_view(request):
     # se tiver validado vai validar etc
     return render(request, 'authors/pages/register_view.html', {
         'form': form,
+        'form_action': reverse('authors:create'),
     })
 
 
