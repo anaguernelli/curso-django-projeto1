@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from django.urls import reverse
 
+
 def register_view(request):
     # exibe o formulário
     register_form_data = request.session.get('register_form_data', None)
