@@ -108,17 +108,17 @@ class RegisterForm(forms.ModelForm):
         # exclude = ['first_name']
 
     # def deve ser específico
-    # def clean_password(self):
-    #     data = self.cleaned_data.get('password')
+    # clean é basicamente uma validaçãode campo específico
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        exists = User.objects.filter(email=email).exists()
 
-    #     if 'anao' in data:
-    #         raise ValidationError(
-    #             'Não digite %(value)s no campo password',
-    #             code='invalid',
-    #             params={'value': '"anao"'}
-    #         )
+        if exists:
+            raise ValidationError(
+                'User e-mail is already in use'
+            )
 
-    #     return data
+        return email
 
     def clean(self):
         cleaned_data = super().clean()
