@@ -17,7 +17,7 @@ def register_view(request):
     # se tiver validado vai validar etc
     return render(request, 'authors/pages/register_view.html', {
         'form': form,
-        'form_action': reverse('authors:create'),
+        'form_action': reverse('authors:register_create'),
     })
 
 
@@ -45,3 +45,10 @@ def register_create(request):
         del(request.session['register_form_data'])
 
     return redirect('authors:register')
+
+def login_view(request):
+    return render(request, 'authors/pages/login.html')
+
+def login_create(request):
+    return render(request, 'authors/pages/login.html')
+
