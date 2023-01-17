@@ -74,5 +74,3 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest, RecipeMixin):
             len(self.browser.find_elements(By.CLASS_NAME, "recipe")),
             2
         )
-
-        self.sleep(5)
