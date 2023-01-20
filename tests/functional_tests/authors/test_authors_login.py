@@ -46,3 +46,52 @@ class AuthorsLoginTest(AuthorBaseTest):
             'Not Found',
             self.browser.find_element(By.TAG_NAME, 'body').text
             )
+
+    def test_form_login_is_invalid(self):
+        # User abre a página de login
+        self.browser.get(
+            self.live_server_url + reverse('authors:login')
+        )
+
+        # User vê o form de login
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
+
+        # E tenta enviar valores vazios
+        username = self.get_by_placeholder(form, 'Type your username')
+        password = self.get_by_placeholder(form, 'Type your password')
+
+        # User envia valores "vazios"
+        username.send_keys(' ')
+        password.send_keys(' ')
+
+        form.submit()
+
+        self.assertIn(
+            'Invalid username or password',
+            self.browser.find_element(By.TAG_NAME, 'body').text
+        )
+
+    # is_authenticated
+    def test_form_login_invalid_credentials(self):
+        # User abre página de login
+        self.browser.get(
+            self.live_server_url + reverse('authors:login')
+        )
+
+        # User vê form de login
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
+
+        # E tenta enviar valores com dados que nao correspondem
+        username = self.get_by_placeholder(form, 'Type your username')
+        password = self.get_by_placeholder(form, 'Type your password')
+
+        username.send_keys('invalid_user')
+        password.send_keys('invalid_password')
+
+        # Envia form
+        form.submit()
+
+        self.assertIn(
+            'Invalid credentials',
+            self.browser.find_element(By.TAG_NAME, 'body').text
+        )

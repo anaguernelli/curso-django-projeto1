@@ -111,7 +111,6 @@ class AuthorsRegisterTest(AuthorBaseTest):
 
         form.submit()
 
-        self.sleep(7)
         self.assertIn(
             'Your user is created, please log in.',
             self.browser.find_element(By.TAG_NAME, 'body').text
