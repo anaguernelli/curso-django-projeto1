@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 
 from django.http import Http404
 
+from authors.forms.recipe_form import AuthorRecipeForm
+
 from .forms import RegisterForm, LoginForm
 
 from django.contrib import messages
@@ -123,19 +125,29 @@ def dashboard(request):
         }
     )
 
+
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard_recipe_edit(request, id):
+    # poderia usar .get() no lugar do filter()
     recipe = Recipe.objects.filter(
         is_published=False,
         author=request.user,
         pk=id,
-    )
+    ).first()
 
     if not recipe:
         raise Http404()
+
+    # Ou cria um form vazio ou cria um form com o q foi postado
+    form = AuthorRecipeForm(
+        request.POST or None,
+        # UMA recipe
+        instance=recipe
+    )
     return render(
         request,
         'authors/pages/dashboard_recipe.html',
         context={
+            'form': form,
         }
     )
