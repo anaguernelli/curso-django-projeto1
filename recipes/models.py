@@ -39,16 +39,3 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
-
-
-# EDITED
-# title description slug
-# preparation_time preparation_time_unit
-# servings servings_unit
-# preparation_step
-# preparation_step_is_html
-# created_at updated_at
-# is_published
-# cover
-# category (Relação)
-# Author (Relação)
