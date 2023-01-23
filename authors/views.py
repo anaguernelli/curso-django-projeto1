@@ -51,6 +51,7 @@ def register_create(request):
         messages.success(request, 'Your user is created, please log in.')
 
         del(request.session['register_form_data'])
+
         # depois q cadastrado, é direcionado para url de login
         return redirect(reverse('authors:login'))
 
@@ -140,10 +141,33 @@ def dashboard_recipe_edit(request, id):
 
     # Ou cria um form vazio ou cria um form com o q foi postado
     form = AuthorRecipeForm(
-        request.POST or None,
+        data=request.POST or None,
+        # com o enctype="multipart/form-data", habilitamos tbm a possibilidade
+        # de receber no form files
+        # só aí o form fica apto a receber arquivos TBM
+        files=request.FILES or None,
         # UMA recipe
         instance=recipe
     )
+
+    if form.is_valid():
+        # Agora, o form é válido e eu posso tentar salvá-lo
+        # Joga os dados do formulário pro recipe, não exatamente salva
+        recipe = form.save(commit=False)
+
+        # garantir que o form seja do usuário
+        recipe.author = request.user
+
+        # Não permitir q receba html
+        recipe.preparation_steps_is_html = False
+
+        # Para não conseguir editar algo já publicado
+        recipe.is_published = False
+        recipe.save()
+
+        messages.success(request, 'Your recipe has been saved!')
+        return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)))
+
     return render(
         request,
         'authors/pages/dashboard_recipe.html',
