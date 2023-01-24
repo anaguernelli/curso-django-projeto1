@@ -208,7 +208,13 @@ def dashboard_recipe_create(request):
     )
 
 
-def dashboard_recipe_delete(request, id):
+def dashboard_recipe_delete(request):
+    if not request.POST:
+        raise Http404()
+
+    POST = request.POST
+    id = POST.get('id')
+
     recipe = Recipe.objects.filter(
         is_published=False,
         author=request.user,
