@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-# Models converte o código em tabelas de db
-
+from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
@@ -39,3 +37,7 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    # Atalho para reverse
+    def get_absolute_url(self):
+        return reverse("recipes:recipe", args={self.id,})
