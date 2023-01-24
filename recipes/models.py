@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
+
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
@@ -40,4 +42,14 @@ class Recipe(models.Model):
 
     # Atalho para reverse
     def get_absolute_url(self):
-        return reverse("recipes:recipe", args={self.id,})
+        return reverse("recipes:recipe", args={self.id, })
+
+    # Criar slug
+    def save(self, *args, **kwargs):
+        # Toda vez q o User escrever o título, vai gerar uma slug com o título
+        if not self.slug:
+            slug = f'{slugify(self.title)}'
+            self.slug = slug
+
+        # nao esqueça de retornar oq está sobrescrevendo
+        return super().save(*args, **kwargs)
