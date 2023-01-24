@@ -21,4 +21,10 @@ urlpatterns = [
         views.dashboard_recipe_create,
         name='dashboard_recipe_create',
     ),
+    path(
+        'dashboard/recipe/<int:id>/delete/',
+        views.dashboard_recipe_delete,
+        name='dashboard_recipe_delete',
+    ),
+
 ]

@@ -1,5 +1,6 @@
 {% comment %} base.html is to pages that wants to extend it {% endcomment %}
 {% comment %} don't forget to declare this base_templates in settings.py (templates > BASE_DIR) {% endcomment %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -21,6 +22,7 @@
     </main>
 
     {% include 'global/partials/footer.html' %}
+    <script src="{% static 'global/js/scripts.js' %}"></script>
 </body>
 
 </html>

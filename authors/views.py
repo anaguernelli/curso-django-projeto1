@@ -186,6 +186,7 @@ def dashboard_recipe_create(request):
 
     if form.is_valid():
         recipe: Recipe = form.save(commit=False)
+
         recipe.author = request.user
         recipe.preparation_steps_is_html = False
         recipe.is_published = False
@@ -193,7 +194,9 @@ def dashboard_recipe_create(request):
         recipe.save()
 
         messages.success(request, 'Your recipe has been created!')
-        return redirect(reverse('authors:dashboard_recipe_create'))
+        return redirect(
+            reverse('authors:dashboard_recipe_edit', args=(recipe.id),)
+        )
 
     return render(
         request,
@@ -203,3 +206,18 @@ def dashboard_recipe_create(request):
             'form_action': reverse('authors:dashboard_recipe_create')
         }
     )
+
+
+def dashboard_recipe_delete(request, id):
+    recipe = Recipe.objects.filter(
+        is_published=False,
+        author=request.user,
+        pk=id,
+    ).first()
+
+    if not recipe:
+        raise Http404()
+
+    recipe.delete()
+    messages.success(request, 'Deleted successfully')
+    return redirect(reverse('authors:dashboard'))
