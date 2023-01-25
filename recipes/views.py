@@ -8,12 +8,48 @@ from utils.pagination import make_pagination
 # lê e renderiza o arquivo (deixa aparecer no código fonte o HTML, etc)
 from .models import Recipe
 
+from django.views.generic import ListView
+
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 # caso não ache nada no per_page, o padrão vai ser 6
 # int() para qunado fizer upload diferente, para algum servidor diferente
 # não dar erro
+
+
+class RecipeListViewBase(ListView):
+    model = Recipe
+    # paginação pronta
+    paginate_by = None
+    # Obj que vai por padrao pra dentro do context
+    context_object_name = 'recipes'
+    ordering = ['-id']
+    template_name = 'recipes/pages/home.html'
+
+    def get_queryset(self, *args, **kwargs):
+        query_set = super().get_queryset(*args, **kwargs)
+        query_set = query_set.filter(
+            is_published=True
+        )
+
+        return query_set
+
+    def get_context_data(self, *args, **kwargs):
+        # Esse context vem de context_object_name
+        context = super().get_context_data(*args, **kwargs)
+
+        page_obj, pagination_range = make_pagination(
+            self.request,
+            context.get('recipes'),
+            PER_PAGE
+        )
+
+        context.update(
+            {'recipes': page_obj, 'pagination_range': pagination_range}
+        )
+
+        return context
 
 
 def home(request):

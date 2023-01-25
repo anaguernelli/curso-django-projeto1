@@ -1,5 +1,6 @@
 from urllib import request
 from django.views import View
+from authors.forms.recipe_form import AuthorRecipeForm
 from recipes.models import Recipe
 from django.http.response import Http404
 from django.contrib import messages
@@ -85,3 +86,15 @@ class DashboardRecipe(View):
             )
 
         return self.render_recipe(form)
+
+
+@method_decorator(
+    login_required(login_url='authors:login', redirect_field_name='next'),
+    name='dispatch'
+)
+class DashboardRecipeDelete(DashboardRecipe):
+    def post(self, *args, **kwargs):
+        recipe = self.get_recipe(self.request.POST.get('id'))
+        recipe.delete()
+        messages.success(request, 'Deleted successfully.')
+        return redirect(reverse('authors:dashboard'))
