@@ -13,7 +13,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard',),
     path(
         'dashboard/recipe/create/',
-        views.dashboard_recipe_create,
+        views.DashboardRecipe.as_view(),
         name='dashboard_recipe_create',
     ),
     path(

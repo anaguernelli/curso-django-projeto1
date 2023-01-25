@@ -2,17 +2,16 @@ from urllib import request
 from django.views import View
 from recipes.models import Recipe
 from django.http.response import Http404
-from authors.forms.recipe_form import AuthorRecipeForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
 
 class DashboardRecipe(View):
-    def get_recipe(self, id):
+    def get_recipe(self, id=None):
         recipe = None
 
-        if id:
+        if id is not None:
             recipe = Recipe.objects.filter(
                 is_published=False,
                 author=request.user,
@@ -34,7 +33,7 @@ class DashboardRecipe(View):
         )
 
     # ao invés de dar param request e id, pode usar kwargs.get('id)
-    def get(self, request, id):
+    def get(self, request, id=None):
         recipe = self.get_recipe('id')
 
         form = AuthorRecipeForm(
@@ -43,7 +42,7 @@ class DashboardRecipe(View):
 
         return self.render_recipe(form)
 
-    def post(self, request, id):
+    def post(self, request, id=None):
         recipe = self.get_recipe(id)
         form = AuthorRecipeForm(
             data=request.POST or None,
@@ -63,7 +62,8 @@ class DashboardRecipe(View):
 
             messages.success(request, 'Your recipe has been saved!')
             return redirect(
-                reverse('authors:dashboard_recipe_edit', args=(id,))
+                reverse('authors:dashboard_recipe_edit', args=(
+                    recipe.id,))
             )
 
         return self.render_recipe(form)
