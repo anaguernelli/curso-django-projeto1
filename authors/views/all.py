@@ -4,7 +4,8 @@ from django.http import Http404
 
 from authors.forms.recipe_form import AuthorRecipeForm
 
-from .forms import RegisterForm, LoginForm
+from authors.forms import RegisterForm, LoginForm
+# ou "..forms"
 
 from django.contrib import messages
 
