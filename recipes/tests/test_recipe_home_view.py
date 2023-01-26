@@ -12,7 +12,7 @@ class RecipeViewsTest(RecipeTestBase):
         view = resolve(reverse('recipes:home'))
         # pôr só '/' na url é hard coded, desta forma acima
         # está trabalhando de forma dinâmica
-        self.assertIs(view.func, views.home)
+        self.assertIs(view.func.view_class, views.RecipeListViewHome)
         # está comparando se a função view É a view de home
 
     def test_recipe_home_view_returns_status_code_200_OK(self):
