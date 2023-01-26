@@ -13,8 +13,11 @@ urlpatterns = [
         'recipes/category/<int:category_id>/',
         views.RecipeListViewCategory.as_view(),
         name='category'),
-    path('recipes/<int:id>/', views.recipe, name='recipe'),
-    path('recipes/search/', views.RecipeListViewSearch.as_view(), name='search'),
+    path('recipes/<int:pk>/', views.RecipeDetail.as_view(), name='recipe'),
+    path(
+        'recipes/search/',
+        views.RecipeListViewSearch.as_view(),
+        name='search'),
 
 ]
 

@@ -2,8 +2,6 @@ from django.http import Http404
 
 from django.db.models import Q
 
-from django.shortcuts import get_list_or_404, get_object_or_404, render
-
 from utils.pagination import make_pagination
 # lê e renderiza o arquivo (deixa aparecer no código fonte o HTML, etc)
 from .models import Recipe
@@ -107,13 +105,28 @@ class RecipeListViewCategory(RecipeListViewBase):
 #        'title': f'{recipes[0].category.name} - Category |'})
 
 
-def recipe(request, id):
-    recipe = get_object_or_404(Recipe, pk=id, is_published=True,)
+class RecipeDetail(DetailView):
+    model = Recipe
+    # não precisamos de "recipe": recipe, pois já damos
+    # o nome no context_obj_name
+    context_object_name = 'recipe'
+    template_name = 'recipes/pages/recipe-view.html'
 
-    return render(request, 'recipes/pages/recipe-view.html', context={
-        'recipe': recipe,
-        'is_detail_page': True,
-    })
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+
+        ctx.update(
+            {'is_detail_page': True}
+        )
+
+
+# def recipe(request, id):
+#     recipe = get_object_or_404(Recipe, pk=id, is_published=True,)
+
+#     return render(request, 'recipes/pages/recipe-view.html', context={
+#         'recipe': recipe,
+#         'is_detail_page': True,
+#     })
 
 
 class RecipeListViewSearch(RecipeListViewBase):
