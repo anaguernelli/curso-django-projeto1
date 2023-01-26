@@ -119,6 +119,14 @@ class RecipeDetail(DetailView):
             {'is_detail_page': True}
         )
 
+    def get_queryset(self, *args, **kwargs):
+        query_set = super().get_queryset(*args, **kwargs)
+        query_set = query_set.filter(
+            is_published=True
+        )
+
+        return query_set
+
 
 # def recipe(request, id):
 #     recipe = get_object_or_404(Recipe, pk=id, is_published=True,)
