@@ -8,6 +8,8 @@ from .models import Recipe
 
 from django.views.generic import ListView, DetailView
 
+from django.http import JsonResponse
+
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -52,6 +54,25 @@ class RecipeListViewBase(ListView):
 
 class RecipeListViewHome(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
+
+
+# JSON Response
+class RecipeListViewHomeApi(RecipeListViewBase):
+    template_name = 'recipes/pages/home.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        recipes = self.get_context_data()['recipes']
+        # object_list vai dar uam query set
+        recipes_list = recipes.object_list.values()
+
+        # em vez de debugar pode printar
+        # print(recipes.object_list)
+
+        return JsonResponse(
+            # só aceita em forma de lista
+            list(recipes_list),
+            safe=False
+        )
 
 
 # def home(request):
