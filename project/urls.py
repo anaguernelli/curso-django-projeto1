@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('recipes.urls')),
     # recipes/ > ficaria dominio.com/recipes/sobre exemplo
     path('authors/', include('authors.urls')),
-
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 # concatenar o urlpatterns
