@@ -1,10 +1,13 @@
+from django.views.generic import ListView, DetailView
+from django.forms.models import model_to_dict
+from utils.pagination import make_pagination
+from django.http import JsonResponse
 from django.http import Http404
 from django.db.models import Q
-from utils.pagination import make_pagination
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+from django.db.models import Q
 from .models import Recipe
-from django.views.generic import ListView, DetailView
-from django.http import JsonResponse
-from django.forms.models import model_to_dict
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -28,6 +31,13 @@ class RecipeListViewBase(ListView):
         query_set = super().get_queryset(*args, **kwargs)
         query_set = query_set.filter(
             is_published=True
+        )
+        # Vai uma vez na base de dados e pegando
+        # esses dados e trazendo tudo de uma vez
+        # O que deixa o sistema mais rápidp e gasta
+        # Muito menos com servidor
+        query_set = query_set.select_related(
+            'author', 'category'
         )
 
         return query_set
@@ -194,6 +204,35 @@ class RecipeListViewSearch(RecipeListViewBase):
 #         'pagination_range': pagination_range,
 #         'additional_url_query': f'&q={search_term}'
 #     })
+
+
+def theory(request, *args, **kwargs):
+    # O django só chama quando é feita uma consulta
+    recipes = Recipe.objects.filter(
+        Q(
+            Q(title__icontains='Ta',
+                id__gt=10,
+                is_published=True) |
+            Q(
+                id__gt=1000
+            )
+        )
+    )[:20]
+
+    # try:
+    #     recipes = Recipe.objects.get(pk=39283)
+    # except ObjectDoesNotExist:
+    #     recipes = None
+
+    context = {
+        'recipes': recipes
+    }
+
+    return render(
+        request,
+        'recipes/pages/theory.html',
+        context=context,
+    )
 
 
 # JSON Response
