@@ -3,10 +3,9 @@ from django.forms.models import model_to_dict
 from utils.pagination import make_pagination
 from django.http import JsonResponse
 from django.http import Http404
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-from django.db.models import Q
 from .models import Recipe
 import os
 
@@ -209,15 +208,10 @@ class RecipeListViewSearch(RecipeListViewBase):
 def theory(request, *args, **kwargs):
     # O django só chama quando é feita uma consulta
     recipes = Recipe.objects.filter(
-        Q(
-            Q(title__icontains='Ta',
-                id__gt=10,
-                is_published=True) |
-            Q(
-                id__gt=1000
-            )
-        )
-    )[:20]
+        # Selecionar alguma coisa de um mesmo campo
+        # Estamos buscando um id que seja igual ao id do autor
+        id=F('author__id')
+    ).order_by('-id', 'title')[:1]
 
     # try:
     #     recipes = Recipe.objects.get(pk=39283)
