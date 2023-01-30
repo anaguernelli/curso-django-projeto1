@@ -25,6 +25,7 @@ class RecipeManager(models.Manager):
                 )
             )[:5]
 
+
 class Recipe(models.Model):
     objects = RecipeManager()
     title = models.CharField(max_length=65)
