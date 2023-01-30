@@ -3,8 +3,8 @@ from django.forms.models import model_to_dict
 from utils.pagination import make_pagination
 from django.http import JsonResponse
 from django.http import Http404
-from django.db.models import Q, F
-from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+from django.db.models.aggregates import Count, Max, Min, Sum
 from django.shortcuts import render
 from .models import Recipe
 import os
@@ -144,75 +144,16 @@ class RecipeListViewSearch(RecipeListViewBase):
 
 # Function Based Views
 
-# def home(request):
-#     recipes = Recipe.objects.filter(
-#      is_published=True
-#     ).order_by('-id')
-
-#     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
-
-#     return render(request, 'recipes/pages/home.html', context={
-#         'recipes': page_obj,
-#         'pagination_range': pagination_range
-#     })
-
-
-# def category(request, category_id):
-#     recipes = get_list_or_404(
-#         Recipe.objects.filter(
-#             category__id=category_id,
-#             is_published=True,
-#         ).order_by('-id')
-#     )
-
-#     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
-
-#     return render(request, 'recipes/pages/category.html', context={
-#         'recipes': page_obj,
-#        'pagination_range': pagination_range,
-#        'title': f'{recipes[0].category.name} - Category |'})
-
-# def recipe(request, id):
-#     recipe = get_object_or_404(Recipe, pk=id, is_published=True,)
-
-#     return render(request, 'recipes/pages/recipe-view.html', context={
-#         'recipe': recipe,
-#         'is_detail_page': True,
-#     })
-
-# def search(request):
-#     search_term = request.GET.get('q', '').strip()
-
-#     if not search_term:
-#         raise Http404()
-
-#     recipes = Recipe.objects.filter(
-#         Q(
-#             Q(title__icontains=search_term) |
-#             Q(description__icontains=search_term),
-#         ),
-#         is_published=True,
-#     ).order_by('-id')
-
-#     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
-
-#     return render(request, 'recipes/pages/search.html', {
-#         'page_title': f'Search for "{search_term}"',
-#         'search_term': search_term,
-#         'recipes': page_obj,
-#         'pagination_range': pagination_range,
-#         'additional_url_query': f'&q={search_term}'
-#     })
-
-
 def theory(request, *args, **kwargs):
-    # Value retorna um dicionário e não vai na bd em momento algum
-    # Only só seleciona os campos que voce quer
-    # Defer apenas não busca o campo que voce informar
-    recipes = Recipe.objects.defer('is_published')[:10]
+    recipes = Recipe.objects.values('id', 'title') \
+        .filter(title__icontains='o')
+
+    number_of_recipes = recipes.aggregate(number=Count('id'))
 
     context = {
-        'recipes': recipes
+        'recipes': recipes,
+        # Retorna um dicionário
+        'number_of_recipes': number_of_recipes['number'],
     }
 
     return render(
