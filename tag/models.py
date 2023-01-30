@@ -20,7 +20,7 @@ class Tag(models.Model):
     # Representa o id da linha do model descrito acima
     # Usa-se PositiveIntegerField caso o id seja numérico
     # Mas como nosso id pode ter letras, usaremos charfield()
-    object_id = models.CharField()
+    object_id = models.CharField(max_length=255)
 
     # Um campo que representa a relação genérica que conhece
     # os campos acima (contenttype e object_id)
