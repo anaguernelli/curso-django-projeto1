@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.db.models import Value, F
+from django.db.models.functions import Concat
 
 
 class Category(models.Model):
@@ -11,7 +13,20 @@ class Category(models.Model):
         return self.name
 
 
+class RecipeManager(models.Manager):
+    def get_published(self):
+        return self.filter(
+            is_published=True
+        ).annotate(
+            author_full_name=Concat(
+                F('author__first_name'), Value(' '),
+                F('author__last_name'), Value(' ('),
+                F('author__username'), Value(')'),
+                )
+            )[:5]
+
 class Recipe(models.Model):
+    objects = RecipeManager()
     title = models.CharField(max_length=65)
     # CharField atua como varChar do bd
     description = models.CharField(max_length=165)

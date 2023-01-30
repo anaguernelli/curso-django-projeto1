@@ -3,8 +3,7 @@ from django.forms.models import model_to_dict
 from utils.pagination import make_pagination
 from django.http import JsonResponse
 from django.http import Http404
-from django.db.models.functions import Concat
-from django.db.models import Q, F, Value
+from django.db.models import Q
 from django.db.models.aggregates import Count
 from django.shortcuts import render
 from .models import Recipe
@@ -146,17 +145,7 @@ class RecipeListViewSearch(RecipeListViewBase):
 # Function Based Views
 
 def theory(request, *args, **kwargs):
-    # Uma anotação (annotate) dentro da query para criar
-    # um valor (author_full_name no caso)
-    # Junto à concatenação (Concat) dos nomes com um valor
-    # (Value) para espaço e parenteses entre eles
-    recipes = Recipe.objects.all().annotate(
-        author_full_name=Concat(
-            F('author__first_name'), Value(' '),
-            F('author__last_name'), Value(' ('),
-            F('author__username'), Value(')'),
-        )
-    )[:5]
+    recipes = Recipe.objects.get_published()
 
     number_of_recipes = recipes.aggregate(number=Count('id'))
 
