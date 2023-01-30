@@ -206,17 +206,10 @@ class RecipeListViewSearch(RecipeListViewBase):
 
 
 def theory(request, *args, **kwargs):
-    # O django só chama quando é feita uma consulta
-    recipes = Recipe.objects.filter(
-        # Selecionar alguma coisa de um mesmo campo
-        # Estamos buscando um id que seja igual ao id do autor
-        id=F('author__id')
-    ).order_by('-id', 'title')[:1]
-
-    # try:
-    #     recipes = Recipe.objects.get(pk=39283)
-    # except ObjectDoesNotExist:
-    #     recipes = None
+    # Value retorna um dicionário e não vai na bd em momento algum
+    # Only só seleciona os campos que voce quer
+    # Defer apenas não busca o campo que voce informar
+    recipes = Recipe.objects.defer('is_published')[:10]
 
     context = {
         'recipes': recipes

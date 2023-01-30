@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Theory</title>
 </head>
-<body>
+<body bgcolor='#191919'>
     <h1>Theory</h1>
     <ul>
         {% for recipe in recipes %}
-            <li>{{ recipe.id }} {{ recipe.title }} {{ recipe.author }} </li>
+            <li>{{ recipe.id }} {{ recipe.title }}</li>
         {% empty %}
             <p>No recipes found</p>
         {% endfor %}
