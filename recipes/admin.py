@@ -14,7 +14,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagInline(GenericStackedInline):
     model = Tag
     fields = 'name',
-    extra = 1
+    # quantidade de vezes em que vai aparecer opção de adicionar uma tag
+    extra = 2
 
 
 @admin.register(Recipe)
