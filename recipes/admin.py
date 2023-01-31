@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 # TagInline não tem relação com recipe, mas recipe sabe que tem uma relação
-# com taginline, então quando há esse tipo de relação, usamos o 
+# com taginline, então quando há esse tipo de relação, usamos o
 # GenericStackedInline em vez do SyackedInline
 class TagInline(GenericStackedInline):
     model = Tag

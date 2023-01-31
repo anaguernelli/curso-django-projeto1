@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.db.models.aggregates import Count
 from django.shortcuts import render
 from .models import Recipe
+from tag.models import Tag
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -38,6 +39,12 @@ class RecipeListViewBase(ListView):
         query_set = query_set.select_related(
             'author', 'category'
         )
+        # prefetch_relate pq é uma relaão many-to-many/many-to-one
+        # Consulta específica
+        # It also supports prefetching of GenericRelation n GenericForeignKey,
+        # For example, prefetching objects referenced by a GenericForeignKey
+        # is only supported if the query is restricted to one ContentType.
+        query_set = query_set.prefetch_related('tags')
 
         return query_set
 
@@ -142,7 +149,39 @@ class RecipeListViewSearch(RecipeListViewBase):
         return context
 
 
+class RecipeListViewTag(RecipeListViewBase):
+    template_name = 'recipes/pages/tag.html'
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(
+            # tags__slug é basicamente o campo tags no models que faz
+            # uma genericRelation com com Tag e a Tag tem o campo slug
+            tags__slug=self.kwargs.get('slug', '')
+        )
+
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        page_title = Tag.objects.filter(
+            slug=self.kwargs.get('slug', '')).first()
+
+        if not page_title:
+            page_title = 'No recipes found'
+
+        page_title = f'{page_title} - Tag |'
+
+        context.update(
+            {
+                'page_title': page_title,
+            }
+        )
+
+        return context
+
 # Function Based Views
+
 
 def theory(request, *args, **kwargs):
     recipes = Recipe.objects.get_published()
