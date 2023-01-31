@@ -14,6 +14,14 @@ from pathlib import Path
 from django.contrib.messages import constants
 import os
 
+
+# caso não exista a chave de debug no .env
+# if os.environ.get('DEBUG', None) is None:
+#     # if vai garantir que não vá executar o load_dotenv toda vez
+#     from dotenv import load_dotenv
+#     load_dotenv()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
