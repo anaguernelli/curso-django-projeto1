@@ -1,11 +1,12 @@
+from collections import defaultdict
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.db.models import Value, F
 from django.db.models.functions import Concat
-from django.contrib.contenttypes.fields import GenericRelation
 from tag.models import Tag
+from django.forms import ValidationError
 
 
 class Category(models.Model):
@@ -74,3 +75,26 @@ class Recipe(models.Model):
 
         # nao esqueça de retornar oq está sobrescrevendo
         return super().save(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        # dicionário em que agr toda chave é uma lista
+        error_messages = defaultdict(list)
+
+        # podemos pegar a Recipe dentro dela mesma
+        recipe_from_db = Recipe.objects.filter(
+            title_iexact=self.title
+        ).first()
+
+        if recipe_from_db:
+            if recipe_from_db.pk != self.pk:
+                error_messages['title'].append(
+                    'Found recipes with the same title'
+                )
+
+        if error_messages:
+            raise ValidationError(error_messages)
+
+# se a validação é GLOBAL, precisamos então que essa validação funcione
+# em todos os locais que usarmos essa recipe, ou seja, aí validação seria
+# no MODEL, do contrário, a validação feita somente para usuários é
+# feita no FORM, porém uma não anula a outra
