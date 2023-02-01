@@ -473,6 +473,10 @@ e tem que zerar o eixo do topo, botando esse 0 no começo*/
     margin: var(--spacing-gutter-medium) 0;
 }
 
+.hidden-text {
+    display: none;
+}
+
 @media (max-width: 600px) {
     .main-content-list,
     .form-content-grid {

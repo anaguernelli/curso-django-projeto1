@@ -93,8 +93,3 @@ class Recipe(models.Model):
 
         if error_messages:
             raise ValidationError(error_messages)
-
-# se a validação é GLOBAL, precisamos então que essa validação funcione
-# em todos os locais que usarmos essa recipe, ou seja, aí validação seria
-# no MODEL, do contrário, a validação feita somente para usuários é
-# feita no FORM, porém uma não anula a outra
