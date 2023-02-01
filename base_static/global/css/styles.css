@@ -477,6 +477,86 @@ e tem que zerar o eixo do topo, botando esse 0 no começo*/
     display: none;
 }
 
+.menu-container {
+    position: fixed;
+    /* vai aparecer no topo */
+    top: 0;
+    /* vai aparecer um pouco na lateral esquerda */
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    /* altura máxima do viewport (parte interna do navegador) */
+    min-height: 100vh;
+    /* se meu texto passar dos 260px ou 100vh
+    eixo y que é o de arrastar para cima e para baixo, rolar a tela*/
+    overflow-y: auto;
+    background: var(--color-primary);
+    /* ordem de sobreposição de elemnetos na tela */
+    z-index: 2;
+    transition: all 300ms ease-in-out;
+}
+
+.menu-container a {
+    color: var(--color-white);
+}
+
+.menu-hidden {
+    /* "arrasta" o menu pro lado */
+    left: -265px;
+    top: 2rem;
+}
+
+/* a lógica será feita no javascript */
+.button-show-menu-visible {
+    visibility: visible;
+    opacity: 1;
+    left: 5px;
+}
+
+.button-show-menu {
+    position: fixed;
+    left: 255px;
+    top: 2rem;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border: none;
+    font-size: 2rem;
+    z-index: 3;
+    padding: 1rem;
+    visibility: hidden;
+    opacity: 0;
+    /* transição suave */
+    transition: all 300ms ease-in-out;
+    /* tudo só na lateral direita
+    topo, direita, direta inferior e esquerda inferior */
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+.button-close-menu {
+    /* rola junto com a página, diferente do fixed */
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--color-white);
+    background: none;
+    border: none;
+    font-size: 4rem;
+    z-index: 3;
+    cursor: pointer;
+}
+
+.menu-nav {
+    display: flex;
+    flex-flow: column wrap;
+    font-family: var(--font-headings);
+    font-size: 2rem;
+}
+
+.menu-nav a {
+    width: 100%;
+    padding: 1rem;
+}
+
 @media (max-width: 600px) {
     .main-content-list,
     .form-content-grid {
