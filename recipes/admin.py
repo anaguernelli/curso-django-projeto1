@@ -1,7 +1,5 @@
 from django.contrib import admin
 from .models import Category, Recipe
-from tag.models import Tag
-from django.contrib.contenttypes.admin import GenericStackedInline
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -11,11 +9,6 @@ class CategoryAdmin(admin.ModelAdmin):
 # TagInline não tem relação com recipe, mas recipe sabe que tem uma relação
 # com taginline, então quando há esse tipo de relação, usamos o
 # GenericStackedInline em vez do SyackedInline
-class TagInline(GenericStackedInline):
-    model = Tag
-    fields = 'name',
-    # quantidade de vezes em que vai aparecer opção de adicionar uma tag
-    extra = 2
 
 
 @admin.register(Recipe)
@@ -38,10 +31,7 @@ class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ('title',)
     }
-
-    inlines = [
-        TagInline
-    ]
+    autocomplete_fields = 'tags',
 
 
 admin.site.register(Category, CategoryAdmin)

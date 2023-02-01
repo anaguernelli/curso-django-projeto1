@@ -54,7 +54,9 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True
     )
-    tags = GenericRelation(Tag, related_query_name='recipes')
+
+    # vai criar uma lista das tags
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.title
