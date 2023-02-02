@@ -501,16 +501,7 @@ e tem que zerar o eixo do topo, botando esse 0 no começo*/
 }
 
 .menu-hidden {
-    /* "arrasta" o menu pro lado */
-    left: -265px;
-    top: 2rem;
-}
-
-/* a lógica será feita no javascript */
-.button-show-menu-visible {
-    visibility: visible;
-    opacity: 1;
-    left: 5px;
+    left: -255px;
 }
 
 .button-show-menu {
@@ -532,6 +523,14 @@ e tem que zerar o eixo do topo, botando esse 0 no começo*/
     border-radius: 0 4px 4px 0;
     cursor: pointer;
 }
+
+/* a lógica será feita no javascript */
+.button-show-menu-visible {
+    visibility: visible;
+    opacity: 1;
+    left: 5px;
+}
+
 .button-close-menu {
     /* rola junto com a página, diferente do fixed */
     position: absolute;
