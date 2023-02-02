@@ -50,3 +50,18 @@
         buttonShowMenu.addEventListener('click', showMenu)
     }
 })();
+
+(() => {
+    // todos os links que tiverem authors-logout-link, retorna um array com todos
+    const authorsLogoutLinks = document.querySelectorAll('.authors-logout-link')
+    // retorna o primeiro q encontrar
+    const formLogout = document.querySelector('.form-logout')
+
+    for (const link of authorsLogoutLinks) {
+        link.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            formLogout.submit()
+        })
+    }
+})()

@@ -1,0 +1,9 @@
+<form class='inline-form form-logout' action="{% url 'authors:logout' %}" method="POST">
+    {% csrf_token %}
+    {% comment %} 
+    input hidden?
+    para voce saber quem é  o usuário tentando sair da  sua aplicação 
+    {% endcomment %}
+    <input type="hidden" name="username" value={{ request.user.username }}>
+
+  </form>
