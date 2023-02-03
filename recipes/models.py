@@ -57,7 +57,7 @@ class Recipe(models.Model):
     )
 
     # vai criar uma lista das tags
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, default='')
 
     def __str__(self):
         return self.title
@@ -82,7 +82,7 @@ class Recipe(models.Model):
 
         # podemos pegar a Recipe dentro dela mesma
         recipe_from_db = Recipe.objects.filter(
-            title_iexact=self.title
+            title__iexact=self.title
         ).first()
 
         if recipe_from_db:

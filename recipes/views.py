@@ -32,19 +32,15 @@ class RecipeListViewBase(ListView):
         query_set = query_set.filter(
             is_published=True
         )
-        # Vai uma vez na base de dados e pegando
-        # esses dados e trazendo tudo de uma vez
-        # O que deixa o sistema mais rápidp e gasta
-        # Muito menos com servidor
+
         query_set = query_set.select_related(
             'author', 'category'
         )
-        # prefetch_relate pq é uma relaão many-to-many/many-to-one
-        # Consulta específica
-        # It also supports prefetching of GenericRelation n GenericForeignKey,
-        # For example, prefetching objects referenced by a GenericForeignKey
-        # is only supported if the query is restricted to one ContentType.
-        query_set = query_set.prefetch_related('tags')
+        # uma busca na foreign key do author
+        # nao botamos select pq não é uma fk q pode ser seguida
+        # diretamente pelo django, E se houver uma consulta com 6+ outer joins,
+        # é preferível então que troque o select pelo prefetch related
+        query_set = query_set.prefetch_related('tags', 'author__profile')
 
         return query_set
 
