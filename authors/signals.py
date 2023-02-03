@@ -11,6 +11,8 @@ User = get_user_model()
 
 # quando oq eu informar aqui, for salvo, vai emitir o sinal abaixo
 # conectar o user ao post_save
+
+
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, *args, **kwargs):
     if created:
