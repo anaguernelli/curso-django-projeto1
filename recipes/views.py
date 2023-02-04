@@ -8,6 +8,7 @@ from django.db.models.aggregates import Count
 from django.shortcuts import render
 from .models import Recipe
 from tag.models import Tag
+from django.utils import translation
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -54,9 +55,13 @@ class RecipeListViewBase(ListView):
             PER_PAGE
         )
 
-        context.update(
-            {'recipes': page_obj, 'pagination_range': pagination_range}
-        )
+        html_language = translation.get_language()
+
+        context.update({
+            'recipes': page_obj,
+            'pagination_range': pagination_range,
+            'html_language': html_language
+        })
 
         return context
 
