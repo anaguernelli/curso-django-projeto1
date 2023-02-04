@@ -9,6 +9,7 @@ from django.shortcuts import render
 from .models import Recipe
 from tag.models import Tag
 from django.utils import translation
+from django.utils.translation import gettext as _
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -75,9 +76,11 @@ class RecipeListViewCategory(RecipeListViewBase):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        category_translate = _('Category')
 
         context.update({
-            'title': f'{context.get("recipes")[0].category.name} - Category |'
+            'title': f'{context.get("recipes")[0].category.name} - '
+            f'{category_translate} |'
         })
 
     def get_queryset(self, *args, **kwargs):
