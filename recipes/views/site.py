@@ -6,7 +6,7 @@ from django.http import Http404
 from django.db.models import Q
 from django.db.models.aggregates import Count
 from django.shortcuts import render
-from .models import Recipe
+from ..models import Recipe
 from tag.models import Tag
 from django.utils import translation
 from django.utils.translation import gettext as _

@@ -8,11 +8,11 @@ class RecipeModelTest(RecipeTestBase):
         self.recipe = self.make_recipe()
         return super().setUp()
 
-    def test_recipe_no_defaults(self):
+    def make_recipe_no_defaults(self):
         recipe = Recipe(
             category=self.make_category(name='Category Test'),
             author=self.make_author(username='Author Test'),
-            title='Recipe Title',
+            title='Recipe Title 1',
             description='Recipe Description',
             slug='recipe-slug-for-no-defaults',
             preparation_time=10,
@@ -31,21 +31,20 @@ class RecipeModelTest(RecipeTestBase):
         ('preparation_time', 65),
         ('servings_unit', 65),
     ])
-
     def test_recipe_fields_max_length(self, field, max_length):
-        setattr(self.recipe, field, 'a' * (max_length + 1))
+        setattr(self.recipe, field, 'A' * (max_length + 1))
         with self.assertRaises(ValidationError):
             self.recipe.full_clean()
 
     def test_recipe_preparation_steps_is_html_is_false_by_default(self):
-        recipe = self.test_recipe_no_defaults()
+        recipe = self.make_recipe_no_defaults()
         self.assertFalse(
             recipe.preparation_steps_is_html,
             msg='Recipe preparation_steps_is_html is not False',
         )
 
     def test_recipe_is_published_is_false_by_default(self):
-        recipe = self.test_recipe_no_defaults()
+        recipe = self.make_recipe_no_defaults()
         self.assertFalse(
             recipe.is_published,
             msg='Recipe is_published is not False'

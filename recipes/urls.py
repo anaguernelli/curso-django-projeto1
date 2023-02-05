@@ -1,7 +1,6 @@
 from django.urls import path
 
-from . import views
-
+from recipes import views
 # . (dot) - path where you already is
 
 
@@ -48,10 +47,14 @@ urlpatterns = [
         views.RecipeListViewTag.as_view(),
         name="tag",
     ),
-
+    path(
+        'recipes/api/v2/',
+        views.recipe_api_list,
+        name='recipe_api_v2'
+    ),
 ]
 
 # int - Matches zero or any positive integer. Returns an int.
 # slug - Matches any slug string consisting of ASCII letters or numbers, plus
 # hyphen and underscore characters. For example,
-# building-your-1st-django-site.
+# building-your-1st-django-views.

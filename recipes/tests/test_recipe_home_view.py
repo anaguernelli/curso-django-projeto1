@@ -1,6 +1,6 @@
 from django.urls import resolve, reverse
 
-from recipes import views
+from recipes.views import site
 
 from unittest.mock import patch
 
@@ -12,7 +12,7 @@ class RecipeViewsTest(RecipeTestBase):
         view = resolve(reverse('recipes:home'))
         # pôr só '/' na url é hard coded, desta forma acima
         # está trabalhando de forma dinâmica
-        self.assertIs(view.func.view_class, views.RecipeListViewHome)
+        self.assertIs(view.func.view_class, site.RecipeListViewHome)
         # está comparando se a função view É a view de home
 
     def test_recipe_home_view_returns_status_code_200_OK(self):
@@ -61,7 +61,7 @@ class RecipeViewsTest(RecipeTestBase):
     def test_recipe_home_is_paginated(self):
         self.make_recipe_in_batch(qty=8)
 
-        with patch('recipes.views.PER_PAGE', new=3):
+        with patch('recipes.views.site.PER_PAGE', new=3):
             response = self.client.get(reverse('recipes:home'))
             recipes = response.context['recipes']
             # o Paginator embute no recipes
@@ -77,7 +77,7 @@ class RecipeViewsTest(RecipeTestBase):
     def test_invalid_page_query_user_page_one(self):
         self.make_recipe_in_batch(qty=8)
 
-        with patch('recipes.views.PER_PAGE', new=3):
+        with patch('recipes.views.site.PER_PAGE', new=3):
             response = self.client.get(reverse('recipes:home') + "?page=1A")
             # se der uma página invalid
             # ele deve redirecionar pra page 1
