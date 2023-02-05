@@ -88,7 +88,7 @@ class Recipe(models.Model):
         new_height = round((new_width * original_height) / original_width)
 
         # LANCZOS utilizado pra fazer resize da img
-        # (diminui oa img mantendo as proporções)
+        # (diminui a img mantendo as proporções)
         new_image = image_pillow.resize((new_width, new_height), Image.LANCZOS)
 
         new_image.save(
