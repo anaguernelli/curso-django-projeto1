@@ -16,7 +16,7 @@ def delete_cover(instance):
 # objeto de recipe é deletado quando o User deletá-lo
 @receiver(pre_delete, sender=Recipe)
 def recipe_cover_delete(sender, instance, *args, **kwargs):
-    old_instance = Recipe.objects.filter(pk=instance.pk).first()
+    old_instance = Recipe.objects.filter(pk=instance.pk). first()
 
     if old_instance:
         delete_cover(old_instance)
