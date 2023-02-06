@@ -4,18 +4,21 @@ from django.shortcuts import get_object_or_404
 from ..models import Recipe
 from tag.models import Tag
 from ..serializers import RecipeSerializer, TagSerializer
+from rest_framework import status
 
 
-@api_view()
+@api_view(http_method_names=['get', 'post'])
 def recipe_api_list(request):
-    recipes = Recipe.objects.get_published()[:10]
-    serializer = RecipeSerializer(
-        instance=recipes,
-        many=True,
-        context={'request': request}
-    )
-    return Response(serializer.data)
-
+    if request.method == 'GET':
+        recipes = Recipe.objects.get_published()[:10]
+        serializer = RecipeSerializer(
+            instance=recipes,
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        return Response('POST', status=status.HTTP_201_CREATED)
 
 @api_view()
 def recipe_api_detail(request, pk):
