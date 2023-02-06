@@ -10,5 +10,6 @@ class RecipeSerializer(serializers.Serializer):
     preparation = serializers.SerializerMethodField(
         method_name='any_method_name'
     )
+
     def any_method_name(self, recipe):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
