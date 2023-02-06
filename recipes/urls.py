@@ -57,6 +57,11 @@ urlpatterns = [
         views.recipe_api_detail,
         name='recipes_api_v2_detail',
     ),
+    path(
+        'recipes/api/v2/tag/<int:pk>/',
+        views.tag_api_detail,
+        name='recipes_api_v2_tag',
+    ),
 ]
 
 # int - Matches zero or any positive integer. Returns an int.
