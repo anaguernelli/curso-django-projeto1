@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from ..models import Recipe
 from ..serializers import RecipeSerializer
-# from rest_framework.status import status
 
 
 @api_view()

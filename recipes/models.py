@@ -29,8 +29,8 @@ class RecipeManager(models.Manager):
                 F('author__first_name'), Value(' '),
                 F('author__last_name'), Value(' ('),
                 F('author__username'), Value(')'),
-                )
-            )[:5]
+            )
+        ).order_by('-id')
 
 
 class Recipe(models.Model):
