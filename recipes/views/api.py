@@ -5,12 +5,11 @@ from ..models import Recipe
 from tag.models import Tag
 from ..serializers import RecipeSerializer, TagSerializer
 from rest_framework import status
+from rest_framework.views import APIView
 
 
-@api_view(http_method_names=['get', 'post'])
-def recipe_api_list(request):
-    # lendo todas as recipes
-    if request.method == 'GET':
+class RecipeAPIv2List(APIView):
+    def get(self, request):
         recipes = Recipe.objects.get_published()[:10]
         serializer = RecipeSerializer(
             instance=recipes,
@@ -20,60 +19,55 @@ def recipe_api_list(request):
 
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        # criando uma recipe
+    def post(self, request):
         serializer = RecipeSerializer(
             data=request.data,
             context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save(
-            author_id=1, category_id=1,
-            tags=[1, 2]
-        )
+        serializer.save()
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
         )
 
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
+
+class RecipeAPIv2Detail(APIView):
+    def get_recipe(self, pk):
+        recipe = get_object_or_404(
+            Recipe.objects.get_published(),
+            pk=pk
         )
 
+        return recipe
 
-@api_view(['get', 'patch', 'delete'])
-def recipe_api_detail(request, pk):
-    recipes = get_object_or_404(
-        Recipe.objects.get_published(),
-        pk=pk
-    )
-
-    if request.method == 'GET':
+    def get(self, request, pk):
         serializer = RecipeSerializer(
-            instance=recipes,
+            instance=self.get_recipe(pk),
             many=False,
-            context={'request': request}
+            context={"request": request}
         )
+
         return Response(serializer.data)
 
-    elif request.method == 'PATCH':
-        # uma mistura de read e create
+    def patch(self, request, pk):
         serializer = RecipeSerializer(
-            instance=recipes,
+            instance=self.get_recipe(pk),
             data=request.data,
             many=False,
-            context={'request': request},
-            # deve informar que é uma atualização parcial
-            partial=True
+            partial=True,
+            context={"request": request}
         )
+
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data,)
+        return Response(serializer.data)
 
-    elif request.method == 'DELETE':
-        recipes.delete()
+    def delete(self, request, pk):
+        recipe = self.get_recipe(pk)
+        recipe.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
