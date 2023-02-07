@@ -9,6 +9,7 @@ from rest_framework import status
 
 @api_view(http_method_names=['get', 'post'])
 def recipe_api_list(request):
+    # lendo todas as recipes
     if request.method == 'GET':
         recipes = Recipe.objects.get_published()[:10]
         serializer = RecipeSerializer(
@@ -20,10 +21,16 @@ def recipe_api_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        # request.data é um dicionário
-        serializer = RecipeSerializer(data=request.data)
+        # criando uma recipe
+        serializer = RecipeSerializer(
+            data=request.data,
+            context={'request': request}
+        )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(
+            author_id=1, category_id=1,
+            tags=[1, 2]
+        )
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -35,21 +42,39 @@ def recipe_api_list(request):
         )
 
 
-@api_view()
+@api_view(['get', 'patch', 'delete'])
 def recipe_api_detail(request, pk):
-    recipe = get_object_or_404(
+    recipes = get_object_or_404(
         Recipe.objects.get_published(),
         pk=pk
     )
-    serializer = RecipeSerializer(
-        instance=recipe,
-        many=False,
-        context={'request': request}
-    )
-    return Response(serializer.data)
 
-    # o serializer está esperando um objeto, então temos
-    # apenas declarar q a lista/queryset tem muitos elementos
+    if request.method == 'GET':
+        serializer = RecipeSerializer(
+            instance=recipes,
+            many=False,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        # uma mistura de read e create
+        serializer = RecipeSerializer(
+            instance=recipes,
+            data=request.data,
+            many=False,
+            context={'request': request},
+            # deve informar que é uma atualização parcial
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data,)
+
+    elif request.method == 'DELETE':
+        recipes.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view()

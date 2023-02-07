@@ -54,20 +54,24 @@ class RecipeSerializer(serializers.ModelSerializer):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
 
     def validate(self, attrs):
-        # dados iniciais que vêm no form
-        # self.initial_data
+        if self.instance is not None and attrs.get('servings') is None:
+            attrs['servings'] = self.instance.servings
 
-        # dados já salvos/dados que você receb do seu cliente
-        # self.data
+        if self.instance is not None and attrs.get('preparation_time') is None:
+            attrs['preparation_time'] = self.instance.preparation_time
 
-        # dados depois de validar
-        # self.validated_data
-
-        # porém, já estamos recebendo os dados de attrs
         AuthorRecipeValidator(
             data=attrs,
             ErrorClass=serializers.ValidationError
         )
-        # Aqui, só podemos receber o ValidationError com o serializer
 
         return super().validate(attrs)
+
+    def save(self, **kwargs):
+        return super().save(**kwargs)
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
