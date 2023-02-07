@@ -1,8 +1,8 @@
 # converte um model para um formato que seja entendível como JSON
-from collections import defaultdict
 from rest_framework import serializers
 from tag.models import Tag
 from .models import Recipe
+from authors.validators import AuthorRecipeValidator
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -21,7 +21,9 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = [
             'author', 'id', 'title', 'description', 'category',
             'tags', 'public', 'preparation', 'tag_objects',
-            'tag_links'
+            'tag_links', 'preparation_time',
+            'preparation_time_unit', 'servings', 'servings_unit',
+            'preparation_steps', 'cover'
         ]
     # os campos que estão personalizados, deve manter
     public = serializers.BooleanField(
@@ -52,28 +54,20 @@ class RecipeSerializer(serializers.ModelSerializer):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
 
     def validate(self, attrs):
-        # usamos validate quando precisamos do valor de mais
-        # de um campo para fazer validação
-        _my_errors = defaultdict(list)
+        # dados iniciais que vêm no form
+        # self.initial_data
 
-        title = attrs.get('title')
-        description = attrs.get('description')
+        # dados já salvos/dados que você receb do seu cliente
+        # self.data
 
-        if title == description:
-            raise serializers.ValidationError(
-                {
-                    "title": ["alo", "posso", "ter mais", "de um erro"],
-                    "description": ["alo", "posso", "ter mais", "de um erro"]
-                }
-            )
+        # dados depois de validar
+        # self.validated_data
+
+        # porém, já estamos recebendo os dados de attrs
+        AuthorRecipeValidator(
+            data=attrs,
+            ErrorClass=serializers.ValidationError
+        )
+        # Aqui, só podemos receber o ValidationError com o serializer
 
         return super().validate(attrs)
-
-    def validate_title(self, value):
-        # validate_field quando o valor de um campo já serve para a validação
-        title = value
-
-        if len(title) < 5:
-            raise serializers.ValidationError('Must have at least 5 chars.')
-
-        return title
