@@ -16,9 +16,24 @@ def recipe_api_list(request):
             many=True,
             context={'request': request}
         )
+
         return Response(serializer.data)
+
     elif request.method == 'POST':
-        return Response('POST', status=status.HTTP_201_CREATED)
+        # request.data é um dicionário
+        serializer = RecipeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            serializer.validated_data,
+            status=status.HTTP_201_CREATED
+        )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
 
 @api_view()
 def recipe_api_detail(request, pk):
