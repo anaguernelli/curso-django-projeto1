@@ -1,4 +1,5 @@
 # converte um model para um formato que seja entendível como JSON
+from collections import defaultdict
 from rest_framework import serializers
 from tag.models import Tag
 from .models import Recipe
@@ -49,3 +50,30 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def any_method_name(self, recipe):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
+
+    def validate(self, attrs):
+        # usamos validate quando precisamos do valor de mais
+        # de um campo para fazer validação
+        _my_errors = defaultdict(list)
+
+        title = attrs.get('title')
+        description = attrs.get('description')
+
+        if title == description:
+            raise serializers.ValidationError(
+                {
+                    "title": ["alo", "posso", "ter mais", "de um erro"],
+                    "description": ["alo", "posso", "ter mais", "de um erro"]
+                }
+            )
+
+        return super().validate(attrs)
+
+    def validate_title(self, value):
+        # validate_field quando o valor de um campo já serve para a validação
+        title = value
+
+        if len(title) < 5:
+            raise serializers.ValidationError('Must have at least 5 chars.')
+
+        return title
