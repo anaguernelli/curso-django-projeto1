@@ -6,7 +6,9 @@ from tag.models import Tag
 from ..serializers import RecipeSerializer, TagSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from ..permissions import IsOwner
+from django.shortcuts import get_object_or_404
 
 
 class RecipeAPIv2Pagination(PageNumberPagination):
@@ -17,7 +19,7 @@ class RecipeAPIv2ViewSet(ModelViewSet):
     queryset = Recipe.objects.get_published()
     serializer_class = RecipeSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
 
     def get_queryset(self):
         # &category_id=1
@@ -30,9 +32,40 @@ class RecipeAPIv2ViewSet(ModelViewSet):
 
         return qs
 
+    # sobrescrevendo o método que existe no django restf
+    # para garantir que quando eu buscar uma recipe qualquer,
+    # sempre que utilizá-lo vai checar as object permissions
+    def get_object(self):
+        pk = self.kwargs.get('pk', '')
+
+        obj = get_object_or_404(
+            self.get_queryset(),
+            pk=pk,
+            # poderia fazer dessa forma, mas estamos usando
+            # as permissões do django
+            # author=self.request.user
+        )
+
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    def get_permissions(self):
+        if self.request.method in ['PATCH', 'DELETE']:
+            # para patch e delete a permissão usada é esta
+            return [IsOwner(), ]
+
+        return super().get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        # self.request.user é a msm request só que dentro da class
+        print('REQUEST', request.user, self.request.user)
+        print(request.user.is_authenticated)
+        # sem o Bearer token, o usuário fica como anônimo
+        return super().list(request, *args, **kwargs)
+
     def parcial_update(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        recipe = self.get_queryset().filter(pk=pk).first()
+        recipe = self.get_object()
         serializer = RecipeSerializer(
             instance=recipe,
             many=False,
