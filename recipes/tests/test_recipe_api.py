@@ -6,8 +6,13 @@ from recipes.tests.test_recipe_base import RecipeMixin
 
 
 class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
-    def get_recipe_api_list(self, reverse_result=None):
+    def get_recipe_reverse_url(self, reverse_result=None):
         api_url = reverse_result or reverse('recipes:recipes-api-list')
+
+        return api_url
+
+    def get_recipe_api_list(self, reverse_result=None):
+        api_url =self.get_recipe_reverse_url(reverse_result)
         response = self.client.get(api_url)
 
         return response
@@ -31,7 +36,6 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
             qty_of_loaded_recipes
         )
 
-    # TESTE DE PAGINAÇÃO
     # tips: reverse('recipes:recipes-api-list') + f'?page=1' etc
 
     # teste que deve ser feito em todas as páginas, tanto em detail,
@@ -76,4 +80,15 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
         self.assertEqual(
             len(response.data.get('results')),
             9
+        )
+
+    # !!!!!!
+    def test_recipe_api_list_user_must_send_jwt_token_to_create_recipe(self):
+        api_url = self.get_recipe_reverse_url()
+        # Post!!
+        response = self.client.post(api_url)
+
+        self.assertEqual(
+            response.status_code,
+            401
         )
