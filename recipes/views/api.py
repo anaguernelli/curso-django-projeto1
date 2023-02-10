@@ -8,7 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from ..permissions import IsOwner
-from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 
 class RecipeAPIv2Pagination(PageNumberPagination):
@@ -63,6 +63,18 @@ class RecipeAPIv2ViewSet(ModelViewSet):
         print(request.user.is_authenticated)
         # sem o Bearer token, o usuário fica como anônimo
         return super().list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # quando recipe criada, agregar o user que a criou
+        serializer.save(author=request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers
+        )
 
     def parcial_update(self, request, *args, **kwargs):
         recipe = self.get_object()
