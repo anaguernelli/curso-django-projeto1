@@ -23,6 +23,17 @@ class RecipeAPIv2ViewSet(ModelViewSet):
     # escolher quais métodos você aceita
     http_method_names = ['get', 'options', 'head', 'patch', 'post', 'delete']
 
+    def get_serializer_class(self):
+        return super().get_serializer_class()
+
+    def get_serializer(self, *args, **kwargs):
+        return super().get_serializer(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["example"] = 'This is in context now'
+        return context
+
     def get_queryset(self):
         # &category_id=1
         qs = super().get_queryset()
