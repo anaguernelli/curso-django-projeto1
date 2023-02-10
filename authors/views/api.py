@@ -3,6 +3,7 @@ from ..serializers import AuthorSerializer
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 
 
 # User será permitido somente a ler
@@ -18,3 +19,14 @@ class AuthorViewSet(ReadOnlyModelViewSet):
             username=self.request.user.username
         )
         return qs
+
+    @action(
+            methods=['get'],
+            detail=False,
+    )
+    # criando uma url com dados de perfil utilizando o DRF
+    def me(self, request, *args, **kwargs):
+        obj = self.get_queryset().first()
+        serializer = self.get_serializer(instance=obj)
+
+        return Response(serializer.data)
