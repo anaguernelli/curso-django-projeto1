@@ -64,9 +64,8 @@ class RecipeMixin:
             is_published=is_published,
         )
 
-    def make_recipe_in_batch(self, qty=10):
+    def make_recipe_in_batch(self, qty):
         recipes = []
-
         for i in range(qty):
             kwargs = {
                 'title': f'Recipe Title {i}',
@@ -75,7 +74,6 @@ class RecipeMixin:
             }
             recipe = self.make_recipe(**kwargs)
             recipes.append(recipe)
-
         return recipes
 
 

@@ -12,13 +12,13 @@ from rest_framework import status
 
 
 class RecipeAPIv2Pagination(PageNumberPagination):
-    page_size = 1
+    page_size = 3
 
 
 class RecipeAPIv2ViewSet(ModelViewSet):
     queryset = Recipe.objects.get_published()
     serializer_class = RecipeSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = RecipeAPIv2Pagination
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     # escolher quais métodos você aceita
     http_method_names = ['get', 'options', 'head', 'patch', 'post', 'delete']
@@ -72,8 +72,8 @@ class RecipeAPIv2ViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         # self.request.user é a msm request só que dentro da class
-        print('REQUEST', request.user, self.request.user)
-        print(request.user.is_authenticated)
+        # print('REQUEST', request.user, self.request.user)
+        # print(request.user.is_authenticated)
         # sem o Bearer token, o usuário fica como anônimo
         return super().list(request, *args, **kwargs)
 
