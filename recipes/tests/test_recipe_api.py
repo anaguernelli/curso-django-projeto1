@@ -12,7 +12,7 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
         return api_url
 
     def get_recipe_api_list(self, reverse_result=None):
-        api_url =self.get_recipe_reverse_url(reverse_result)
+        api_url = self.get_recipe_reverse_url(reverse_result)
         response = self.client.get(api_url)
 
         return response
