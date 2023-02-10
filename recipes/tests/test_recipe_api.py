@@ -6,9 +6,14 @@ from recipes.tests.test_recipe_base import RecipeMixin
 
 
 class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
-    def test_recipe_api_list_returns_status_code_200(self):
+    def get_recipe_api_list(self):
         api_url = reverse('recipes:recipes-api-list')
         response = self.client.get(api_url)
+
+        return response
+
+    def test_recipe_api_list_returns_status_code_200(self):
+        response = self.get_recipe_api_list()
 
         self.assertEqual(response.status_code, 200)
 
@@ -28,3 +33,17 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
 
     # TESTE DE PAGINAÇÃO
     # tips: reverse('recipes:recipes-api-list') + f'?page=1' etc
+
+    # teste que deve ser feito em todas as páginas, tanto em detail, pesquisa etc
+    def test_recipe_api_list_do_not_show_not_published_recipes(self):
+        recipes = self.make_recipe_in_batch(qty=2)
+        recipe_not_published = recipes[0]
+        recipe_not_published.is_published = False
+        recipe_not_published.save()
+
+        response = self.get_recipe_api_list()
+
+        self.assertEqual(
+            len(response.data.get('results')),
+            1
+        )
